@@ -1,0 +1,11 @@
+FROM ubuntu:latest
+
+RUN apt-get update -y; apt-get install curl -y
+
+RUN sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
+
+COPY . .
+
+CMD dfx start --host 0.0.0.0:8000
+
+EXPOSE 8000

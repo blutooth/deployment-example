@@ -1,0 +1,50 @@
+
+version: "3.8"
+
+
+
+x-services-volume:
+  &dfxjson-volume
+  type: bind
+  source: ./dfx.json
+  target: /dfx.json
+
+
+services: 
+  dfx:
+    platform: linux/amd64
+    build: 
+      context: .
+      dockerfile: dockerfile.dev
+    expose: 
+      - 8000
+    volumes: 
+      - *dfxjson-volume
+      - dotdfx:/.dfx
+    environment: 
+      - MODE=development
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://0.0.0.0:8000"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+  app:
+    depends_on:
+      dfx:    
+        condition: service_healthy
+    platform: linux/amd64
+    build: 
+      context: .
+      dockerfile: dockerfile.app
+    expose: 
+      - 8000
+    volumes:
+      - <<: *dfxjson-volume
+        target: /dfx.json
+      - dotdfx:/.dfx
+    environment: 
+      - MODE=development
+
+
+volumes: 
+  dotdfx:

@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "canisters": {
+    "counter_rs": {
+      "type": "custom",
+      "candid": "counter_rs/counter.did",
+      "wasm": "target/wasm32-unknown-unknown/release/counter_rs-opt.wasm",
+      "build": "cargo build counter counter_rs"
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "0.0.0.0:8000",
+      "type": "ephemeral"
+    }
+  }
+}
